@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 const Chat = ({ route, navigation }) => {
-  const { name } = route.params;
+  const { name, color } = route.params;
 
   useEffect(() => {
     navigation.setOptions({ title: name });
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: color }]}>
       <Text>well, hey there from chat</Text>
     </View>
   );
@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#bdacd1'
   }
 });
 
