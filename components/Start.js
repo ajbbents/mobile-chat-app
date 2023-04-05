@@ -19,13 +19,16 @@ export default class Start extends React.Component {
       <View style={styles.container}>
         <ImageBackground source={require('../assets/background-image.png')} style={styles.image}>
           <Text style={styles.title}>Hello from start</Text>
+          {/* user input portion of page */}
           <View style={styles.inputBox}>
+            {/* user name box */}
             <TextInput
               style={styles.nameInput}
               value={this.state.name}
               onChangeText={(name) => this.setState({ name })}
               placeholder='Your Name'
             />
+            {/* background color chooser */}
             <View>
               <Text style={styles.colorText}>Choose your background:</Text>
               <View style={styles.colorWrapper}>
@@ -47,6 +50,7 @@ export default class Start extends React.Component {
                 />
               </View>
             </View>
+            {/* enter chat button */}
             <TouchableOpacity
               style={[styles.chatButton]}
               onPress={() => this.props.navigation.navigate('Chat',
@@ -60,7 +64,7 @@ export default class Start extends React.Component {
   }
 }
 
-
+// Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,

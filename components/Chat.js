@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 const Chat = ({ route, navigation }) => {
+  //inherit props from start page
   const { name, color } = route.params;
 
   useEffect(() => {
