@@ -57,6 +57,7 @@ export default class Start extends React.Component {
                 { name: this.state.name, color: this.state.color })}>
               <Text style={styles.chatButtonText}>Start Chatting</Text>
             </TouchableOpacity>
+            {Platform.OS === "ios" ? <KeyboardAvoidingView behavior="padding" /> : null}
           </View>
         </ImageBackground>
       </View>
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     marginTop: 60,
     fontSize: 45,
     fontWeight: '600',
-    fontColor: "#FFFFFF",
+    color: "#FFFFFF",
   },
   inputBox: {
     backgroundColor: '#FFFFFF',
