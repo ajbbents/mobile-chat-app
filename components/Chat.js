@@ -39,6 +39,7 @@ const Chat = ({ navigation, route }) => {
     });
   }, []);
 
+  //initialize messaging
   useEffect(() => {
     setMessages([
       {
@@ -59,6 +60,7 @@ const Chat = ({ navigation, route }) => {
     ]);
   }, []);
 
+  //return chat screen with messaging and bubble
   return (
     <View style={styles.container}>
       <GiftedChat
