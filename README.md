@@ -16,7 +16,12 @@
 Full-Stack Web Developer
 
 <h2>Objective</h2>
-To build a serverless, progressive web application (PWA) with React using test-driven development (TDD) and behavior-driven development (BDD) techniques. This app uses the Google Calendar API to fetch upcoming events.
+To build a chat app for mobile devices using React Native. The app will provide users with a that interface and options to share images and their location.
+
+![start01](img/start01.png)
+![chat01](img/chat01.png)
+![chat02](img/chat02.png)
+![chat03](img/chat03.png)
 
 <h2>Dependencies</h2>
   <p>"@react-navigation/native": "^6.1.6",<br>
