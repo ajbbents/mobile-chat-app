@@ -12,6 +12,7 @@ const Chat = ({ navigation, route }) => {
     setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
   };
 
+  //adjusts color and details of text bubbles
   const renderBubble = (props) => {
     return <Bubble
       {...props}
@@ -26,17 +27,23 @@ const Chat = ({ navigation, route }) => {
     />
   };
 
+  //navigation inheritance of name and background color
   useEffect(() => {
     let name = route.params.name;
     let color = route.params.color;
     navigation.setOptions({ title: name });
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: color,
+      },
+    });
   }, []);
 
   useEffect(() => {
     setMessages([
       {
         _id: 1,
-        text: "hello developer",
+        text: "Hey! Haven't talked in a while",
         user: {
           _id: 2,
           name: "React Native",
