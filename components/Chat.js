@@ -1,34 +1,29 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Platform, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Button, Platform, KeyboardAvoidingView } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 import { collection, query, orderBy, onSnapshot, addDoc } from "firebase/firestore";
 
-const Chat = ({ db, navigation, route }) => {
+//adjusts color and details of text bubbles
+const renderBubble = (props) => {
+  return <Bubble
+    {...props}
+    wrapperStyle={{
+      right: {
+        backgroundColor: "#535353"
+      },
+      left: {
+        backgroundColor: "#D2D2D2"
+      }
+    }}
+  />
+};
+
+export default function Chat({ route, navigation, db }) {
   //inherit props from start page
   const [messages, setMessages] = useState([]);
+  const { name, userID } = route.params;
 
-  const { name, color } = route.params;
-
-  const onSend = (newMessages) => {
-    setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
-  };
-
-  //adjusts color and details of text bubbles
-  const renderBubble = (props) => {
-    return <Bubble
-      {...props}
-      wrapperStyle={{
-        right: {
-          backgroundColor: "#535353"
-        },
-        left: {
-          backgroundColor: "#D2D2D2"
-        }
-      }}
-    />
-  };
-
-  //navigation inheritance of name and background color
+  // navigation inheritance of name and background color
   useEffect(() => {
     let name = route.params.name;
     let color = route.params.color;
@@ -38,28 +33,30 @@ const Chat = ({ db, navigation, route }) => {
         backgroundColor: color,
       },
     });
+
+    //get messages from firebase
+    const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+    const unsubMessages = onSnapshot(q, (docs) => {
+      let newMessages = [];
+      docs.forEach(doc => {
+        newMessages.push({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: new Date(doc.data().createdAt.toMillis())
+        })
+      })
+      setMessages(newMessages);
+    })
+    //unsubscribe
+    return () => {
+      if (unsubMessages) unsubMessages();
+    };
   }, []);
 
-  //initialize messaging
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hey! Haven't talked in a while",
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: "https://placeimg.com/140/140/any",
-        },
-      },
-      {
-        _id: 2,
-        text: 'You have entered the chat.',
-        createdAt: new Date(),
-        system: true,
-      },
-    ]);
-  }, []);
+
+  const onSend = (newMessages) => {
+    addDoc(collection(db, "messages"), newMessages[0])
+  };
 
   //return chat screen with messaging and bubble
   return (
@@ -69,10 +66,13 @@ const Chat = ({ db, navigation, route }) => {
         renderBubble={renderBubble}
         onSend={messages => onSend(messages)}
         user={{
-          _id: 1
+          _id: userID,
+          name,
         }}
       />
       {Platform.OS === 'android' ? <KeyboardAvoidingView behavior='height' /> : null}
+      {Platform.OS === 'ios' ? <KeyboardAvoidingView behavior='padding' /> : null}
+      <Button title="Leave chat" onPress={() => navigation.navigate("Start")} />
     </View>
   )
 };
@@ -82,5 +82,3 @@ const styles = StyleSheet.create({
     flex: 1,
   }
 });
-
-export default Chat;
