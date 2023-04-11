@@ -12,13 +12,9 @@ const Stack = createNativeStackNavigator();
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-// Your web app's Firebase configuration
-
-
-
-
 // construct the app
 const App = () => {
+  // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyDee2HVReF4Btlz-4VzWW7EOKTffEj2JwU",
     authDomain: "mobilechatapp-5cc6d.firebaseapp.com",
@@ -43,12 +39,10 @@ const App = () => {
           name="Start"
           component={Start}
         />
-        <Stack.Screen name="Chat">
-          <Chat
-            db={db}
-            {...props}
-          />
-        </Stack.Screen>
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
