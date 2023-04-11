@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ImageBackground, StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, Image } from "react-native";
+import { ImageBackground, StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView } from "react-native";
 import { getAuth, signInAnonymously } from "firebase/auth";
 
 const backgroundColors = {
@@ -77,6 +77,7 @@ const Start = ({ navigation }) => {
             <Text style={styles.chatButtonText}>Start Chatting</Text>
           </TouchableOpacity>
           {Platform.OS === "ios" ? <KeyboardAvoidingView behavior="padding" /> : null}
+          {Platform.OS === "android" ? <KeyboardAvoidingView behavior="height" /> : null}
         </View>
       </ImageBackground>
     </View>
