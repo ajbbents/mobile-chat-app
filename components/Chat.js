@@ -26,7 +26,7 @@ const renderInputToolbar = (isConnected) => (props) => {
 };
 
 //create chat component
-export default function Chat({ route, navigation, db, isConnected }) {
+const Chat = ({ route, navigation, db, isConnected }) => {
   //inherit props from start page
   const [messages, setMessages] = useState([]);
   const { name, userID } = route.params;
@@ -67,7 +67,6 @@ export default function Chat({ route, navigation, db, isConnected }) {
     return () => {
       if (unsubMessages) unsubMessages();
     };
-
   }, [isConnected]);
 
   //async function sets messages as cached
@@ -110,6 +109,8 @@ export default function Chat({ route, navigation, db, isConnected }) {
     </View>
   )
 };
+
+export default Chat;
 
 const styles = StyleSheet.create({
   container: {
