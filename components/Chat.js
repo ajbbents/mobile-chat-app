@@ -26,10 +26,11 @@ const renderInputToolbar = (isConnected) => (props) => {
 };
 
 //create chat component
-export default function Chat({ route, navigation, db, isConnected, storage }) {
+export default function Chat({ route, navigation, db, isConnected }) {
   //inherit props from start page
   const [messages, setMessages] = useState([]);
   const { name, userID } = route.params;
+  let unsubMessages;
 
   // navigation inheritance of name and background color
   useEffect(() => {
@@ -42,25 +43,47 @@ export default function Chat({ route, navigation, db, isConnected, storage }) {
       },
     });
 
-    //get messages from firebase
-    const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
-    const unsubMessages = onSnapshot(q, (docs) => {
-      let newMessages = [];
-      docs.forEach(doc => {
-        newMessages.push({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: new Date(doc.data().createdAt.toMillis())
-        })
-      })
-      setMessages(newMessages);
-    })
+    //determine connectivity, get messages from firebase
+    if (isConnected === true) {
+      if (unsubMessages) unsubMessages();
+      unsubMessages = null;
+
+      const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+      unsubMessages = onSnapshot(q, (docs) => {
+        let newMessages = [];
+        docs.forEach((doc) => {
+          newMessages.push({
+            id: doc.id,
+            ...doc.data(),
+            createdAt: new Date(doc.data().createdAt.toMillis())
+          });
+        });
+        cacheMessages(newMessages)
+        setMessages(newMessages);
+      });
+    } else { loadCachedMessages() };
+
     //unsubscribe
     return () => {
       if (unsubMessages) unsubMessages();
     };
-  }, []);
 
+  }, [isConnected]);
+
+  //async function sets messages as cached
+
+  const loadCachedMessages = async () => {
+    const cachedMessages = await AsyncStorage.getItem('messages_stored') || [];
+    setMessages(JSON.parse(cachedMessages));
+  };
+
+  const cacheMessages = async (messagesToCache) => {
+    try {
+      await AsyncStorage.setItem('messages_stored', JSON.stringify(messagesToCache));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const onSend = (newMessages) => {
     addDoc(collection(db, "messages"), newMessages[0])
@@ -69,15 +92,18 @@ export default function Chat({ route, navigation, db, isConnected, storage }) {
   //return chat screen with messaging and bubble
   return (
     <View style={styles.container}>
-      <GiftedChat
-        messages={messages}
-        renderBubble={renderBubble}
-        onSend={messages => onSend(messages)}
-        user={{
-          _id: userID,
-          name,
-        }}
-      />
+      {(isConnected === true) ?
+        <GiftedChat
+          messages={messages}
+          renderBubble={renderBubble}
+          renderInputToolbar={renderInputToolbar(isConnected)}
+          onSend={messages => onSend(messages)}
+          user={{
+            _id: userID,
+            name,
+          }}
+        /> : null
+      }
       {Platform.OS === 'android' ? <KeyboardAvoidingView behavior='height' /> : null}
       {Platform.OS === 'ios' ? <KeyboardAvoidingView behavior='padding' /> : null}
       <Button title="Leave chat" onPress={() => navigation.navigate("Start")} />
