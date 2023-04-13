@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import navigation screens
 import Start from './components/Start';
 import Chat from './components/Chat';
-import { useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
+
+// import offline functionality
+import { useNetInfo } from "@react-native-community/netinfo";
+import { LogBox, Alert } from 'react-native';
 
 // construct the app
 const App = () => {
