@@ -15,22 +15,12 @@ import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore"
 // import offline functionality
 import { useNetInfo } from "@react-native-community/netinfo";
 import { LogBox, Alert } from 'react-native';
+import { getStorage } from "firebase/storage";
 
-LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
+LogBox.ignoreLogs(["AsyncStorage has been extracted from", "Cannot connect to Metro"]);
 
 // construct the app
 const App = () => {
-  const connectionStatus = useNetInfo();
-
-  useEffect(() => {
-    if (connectionStatus.isConnected === false) {
-      Alert.alert("Connection lost :(");
-      disableNetwork(db);
-    } else if (connectionStatus.isConnected === true) {
-      enableNetwork(db);
-    }
-  }, [connectionStatus.isConnected]);
-
   // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyDee2HVReF4Btlz-4VzWW7EOKTffEj2JwU",
@@ -46,6 +36,18 @@ const App = () => {
 
   // Initialize Cloud Firestore and get a reference to service
   const db = getFirestore(app);
+
+  // determine and direct connection status
+  const connectionStatus = useNetInfo();
+
+  useEffect(() => {
+    if (connectionStatus.isConnected === false) {
+      Alert.alert("Connection lost :(");
+      disableNetwork(db);
+    } else if (connectionStatus.isConnected === true) {
+      enableNetwork(db);
+    }
+  }, [connectionStatus.isConnected]);
 
   return (
     <NavigationContainer>
