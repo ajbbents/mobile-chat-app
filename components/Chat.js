@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View, Button, Platform, KeyboardAvoidingView } from 'react-native';
-import { Bubble, GiftedChat } from 'react-native-gifted-chat';
+import { StyleSheet, View, Button, Platform, KeyboardAvoidingView, DatePickerIOSComponent } from 'react-native';
+import { Bubble, GiftedChat, InputToolbar } from 'react-native-gifted-chat';
 import { collection, query, orderBy, onSnapshot, addDoc } from "firebase/firestore";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //adjusts color and details of text bubbles
 const renderBubble = (props) => {
@@ -18,7 +19,14 @@ const renderBubble = (props) => {
   />
 };
 
-export default function Chat({ route, navigation, db }) {
+//render input bar if connected, not if not
+const renderInputToolbar = (isConnected) => (props) => {
+  if (isConnected) return <InputToolbar {...props} />;
+  else return null;
+};
+
+//create chat component
+export default function Chat({ route, navigation, db, isConnected, storage }) {
   //inherit props from start page
   const [messages, setMessages] = useState([]);
   const { name, userID } = route.params;
