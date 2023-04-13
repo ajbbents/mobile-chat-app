@@ -16,8 +16,21 @@ import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore"
 import { useNetInfo } from "@react-native-community/netinfo";
 import { LogBox, Alert } from 'react-native';
 
+LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
+
 // construct the app
 const App = () => {
+  const connectionStatus = useNetInfo();
+
+  useEffect(() => {
+    if (connectionStatus.isConnected === false) {
+      Alert.alert("Connection lost :(");
+      disableNetwork(db);
+    } else if (connectionStatus.isConnected === true) {
+      enableNetwork(db);
+    }
+  }, [connectionStatus.isConnected]);
+
   // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyDee2HVReF4Btlz-4VzWW7EOKTffEj2JwU",
@@ -46,6 +59,7 @@ const App = () => {
         <Stack.Screen name="Chat">
           {(props) => (
             <Chat
+              isConnected={connectionStatus.isConnected}
               db={db}
               {...props}
             />
