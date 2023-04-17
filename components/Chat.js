@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View, Button, Platform, KeyboardAvoidingView, DatePickerIOSComponent } from 'react-native';
+import { StyleSheet, View, Button, Platform, KeyboardAvoidingView } from 'react-native';
 import { Bubble, GiftedChat, InputToolbar } from 'react-native-gifted-chat';
 import { collection, query, orderBy, onSnapshot, addDoc } from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,13 +29,13 @@ const renderInputToolbar = (isConnected) => (props) => {
 const Chat = ({ route, navigation, db, isConnected }) => {
   //inherit props from start page
   const [messages, setMessages] = useState([]);
-  const { name, userID } = route.params;
+  const { name, userID, color } = route.params;
   let unsubMessages;
 
   // navigation inheritance of name and background color
   useEffect(() => {
-    let name = route.params.name;
-    let color = route.params.color;
+    // let name = route.params.name;
+    // let color = route.params.color;
     navigation.setOptions({ title: name });
     navigation.setOptions({
       headerStyle: {
@@ -53,15 +53,14 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         let newMessages = [];
         docs.forEach((doc) => {
           newMessages.push({
-            id: doc.id,
-            ...doc.data(),
-            createdAt: new Date(doc.data().createdAt.toMillis())
+            id: doc.id, ...doc.data(), createdAt: new Date(doc.data().createdAt.toMillis())
           });
+          cacheMessages(newMessages);
+          setMessages(newMessages);
+          // console.log(messages);
         });
-        cacheMessages(newMessages)
-        setMessages(newMessages);
       });
-    } else { loadCachedMessages() };
+    } else loadCachedMessages();
 
     //unsubscribe
     return () => {

@@ -15,7 +15,6 @@ import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore"
 // import offline functionality
 import { useNetInfo } from "@react-native-community/netinfo";
 import { LogBox, Alert } from 'react-native';
-import { getStorage } from "firebase/storage";
 
 LogBox.ignoreLogs(["AsyncStorage has been extracted from", "Cannot connect to Metro"]);
 
