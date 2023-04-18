@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View, Button, Platform, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Button, Platform, Text, KeyboardAvoidingView } from 'react-native';
 import { Bubble, GiftedChat, InputToolbar } from 'react-native-gifted-chat';
 import { collection, query, orderBy, onSnapshot, addDoc } from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -53,13 +53,10 @@ const Chat = ({ route, navigation, db, isConnected }) => {
           newMessages.push({
             id: doc.id, ...doc.data(), createdAt: new Date(doc.data().createdAt.toMillis())
           });
-          cacheMessages(newMessages);
-          setMessages(newMessages);
-          // console.log(AsyncStorage);
         });
+        cacheMessages(newMessages);
         setMessages(newMessages);
-        console.log(messages.length);
-      });
+      })
     } else loadCachedMessages();
 
     //unsubscribe
