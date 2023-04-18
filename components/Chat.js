@@ -34,8 +34,6 @@ const Chat = ({ route, navigation, db, isConnected }) => {
 
   // navigation inheritance of name and background color
   useEffect(() => {
-    // let name = route.params.name;
-    // let color = route.params.color;
     navigation.setOptions({ title: name });
     navigation.setOptions({
       headerStyle: {
@@ -57,8 +55,10 @@ const Chat = ({ route, navigation, db, isConnected }) => {
           });
           cacheMessages(newMessages);
           setMessages(newMessages);
-          // console.log(messages);
+          // console.log(AsyncStorage);
         });
+        setMessages(newMessages);
+        console.log(messages.length);
       });
     } else loadCachedMessages();
 
@@ -69,18 +69,17 @@ const Chat = ({ route, navigation, db, isConnected }) => {
   }, [isConnected]);
 
   //async function sets messages as cached
-
-  const loadCachedMessages = async () => {
-    const cachedMessages = await AsyncStorage.getItem('messages_stored') || [];
-    setMessages(JSON.parse(cachedMessages));
-  };
-
   const cacheMessages = async (messagesToCache) => {
     try {
       await AsyncStorage.setItem('messages_stored', JSON.stringify(messagesToCache));
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  const loadCachedMessages = async () => {
+    const cachedMessages = await AsyncStorage.getItem('messages_stored') || [];
+    setMessages(JSON.parse(cachedMessages));
   };
 
   const onSend = (newMessages) => {
@@ -109,10 +108,10 @@ const Chat = ({ route, navigation, db, isConnected }) => {
   )
 };
 
-export default Chat;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   }
 });
+
+export default Chat;
