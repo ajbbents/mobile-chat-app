@@ -3,27 +3,8 @@ import { StyleSheet, View, Button, Platform, Text, KeyboardAvoidingView } from '
 import { Bubble, GiftedChat, InputToolbar } from 'react-native-gifted-chat';
 import { collection, query, orderBy, onSnapshot, addDoc } from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-//adjusts color and details of text bubbles
-const renderBubble = (props) => {
-  return <Bubble
-    {...props}
-    wrapperStyle={{
-      right: {
-        backgroundColor: "#535353"
-      },
-      left: {
-        backgroundColor: "#D2D2D2"
-      }
-    }}
-  />
-};
-
-//render input bar if connected, not if not
-const renderInputToolbar = (isConnected) => (props) => {
-  if (isConnected) return <InputToolbar {...props} />;
-  else return null;
-};
+import CustomActions from './CustomActions';
+import MapView from 'react-native-maps';
 
 //create chat component
 const Chat = ({ route, navigation, db, isConnected }) => {
@@ -83,6 +64,55 @@ const Chat = ({ route, navigation, db, isConnected }) => {
     addDoc(collection(db, "messages"), newMessages[0])
   };
 
+  //adjusts color and details of text bubbles
+  const renderBubble = (props) => {
+    return <Bubble
+      {...props}
+      wrapperStyle={{
+        right: {
+          backgroundColor: "#535353"
+        },
+        left: {
+          backgroundColor: "#D2D2D2"
+        }
+      }}
+    />
+  };
+
+  //render input bar if connected, not if not
+  const renderInputToolbar = (isConnected) => (props) => {
+    if (isConnected) return <InputToolbar {...props} />;
+    else return null;
+  };
+
+  // render add photos.maps circle button
+  const renderCustomActions = (props) => {
+    return <CustomActions {...props} />;
+  };
+
+  const renderCustomView = (props) => {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{
+            width: 150,
+            height: 100,
+            borderRadius: 13,
+            margin: 3
+          }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
   //return chat screen with messaging and bubble
   return (
     <View style={styles.container}>
@@ -92,6 +122,8 @@ const Chat = ({ route, navigation, db, isConnected }) => {
           renderBubble={renderBubble}
           renderInputToolbar={renderInputToolbar(isConnected)}
           onSend={messages => onSend(messages)}
+          renderActions={renderCustomActions}
+          renderCustomView={renderCustomView}
           user={{
             _id: userID,
             name,
