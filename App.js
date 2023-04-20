@@ -4,22 +4,24 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import navigation screens
 import Start from './components/Start';
 import Chat from './components/Chat';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const Stack = createNativeStackNavigator();
-
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
+
 
 // import offline functionality
 import { useNetInfo } from "@react-native-community/netinfo";
 import { LogBox, Alert } from 'react-native';
 
+const Stack = createNativeStackNavigator();
+
 LogBox.ignoreLogs(["AsyncStorage has been extracted from", "Cannot connect to Metro"]);
 
 // construct the app
 const App = () => {
+  // determine and direct connection status
+  const connectionStatus = useNetInfo();
+
   // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyDee2HVReF4Btlz-4VzWW7EOKTffEj2JwU",
@@ -36,12 +38,10 @@ const App = () => {
   // Initialize Cloud Firestore and get a reference to service
   const db = getFirestore(app);
 
-  // determine and direct connection status
-  const connectionStatus = useNetInfo();
-
   useEffect(() => {
     if (connectionStatus.isConnected === false) {
       Alert.alert("Connection lost :(");
+      this.load
       disableNetwork(db);
     } else if (connectionStatus.isConnected === true) {
       console.log("connected back up");
