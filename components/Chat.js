@@ -61,7 +61,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
   const loadCachedMessages = async () => {
     const cachedMessages = await AsyncStorage.getItem('messages') || [];
     setMessages(JSON.parse(cachedMessages));
-    console.log('cached messages loaded. in loadcachedmsgs');
+
   };
 
   const onSend = (newMessages) => {
@@ -120,7 +120,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
   //return chat screen with messaging and bubble
   return (
     <View style={styles.container}>
-      {(isConnected === true) ?
+      {
         <GiftedChat
           messages={messages}
           renderBubble={renderBubble}
@@ -132,7 +132,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
             _id: userID,
             name,
           }}
-        /> : null
+        />
       }
       {Platform.OS === 'android' ? <KeyboardAvoidingView behavior='height' /> : null}
       {Platform.OS === 'ios' ? <KeyboardAvoidingView behavior='padding' /> : null}
