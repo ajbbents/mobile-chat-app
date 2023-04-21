@@ -25,11 +25,8 @@ const App = () => {
   useEffect(() => {
     if (connectionStatus.isConnected === false) {
       Alert.alert("Connection lost :(");
-      console.log("no more interwebs!! fuck!!");
       disableNetwork(db);
     } else if (connectionStatus.isConnected === true) {
-      Alert.alert("connected back on up");
-      console.log("connected back up");
       enableNetwork(db);
     }
   }, [connectionStatus.isConnected]);
