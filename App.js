@@ -15,12 +15,24 @@ import { LogBox, Alert } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
-LogBox.ignoreLogs(["AsyncStorage has been extracted from", "Cannot connect to Metro"]);
+LogBox.ignoreLogs(["Cannot connect to Metro"]);
 
 // construct the app
 const App = () => {
   // determine and direct connection status
   const connectionStatus = useNetInfo();
+
+  useEffect(() => {
+    if (connectionStatus.isConnected === false) {
+      Alert.alert("Connection lost :(");
+      console.log("no more interwebs!! fuck!!");
+      disableNetwork(db);
+    } else if (connectionStatus.isConnected === true) {
+      Alert.alert("connected back on up");
+      console.log("connected back up");
+      enableNetwork(db);
+    }
+  }, [connectionStatus.isConnected]);
 
   // Your web app's Firebase configuration
   const firebaseConfig = {
@@ -38,17 +50,6 @@ const App = () => {
   // Initialize Cloud Firestore and get a reference to service
   const db = getFirestore(app);
 
-  useEffect(() => {
-    if (connectionStatus.isConnected === false) {
-      Alert.alert("Connection lost :(");
-      this.load
-      disableNetwork(db);
-    } else if (connectionStatus.isConnected === true) {
-      console.log("connected back up");
-      enableNetwork(db);
-    }
-  }, [connectionStatus.isConnected]);
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -59,13 +60,11 @@ const App = () => {
           component={Start}
         />
         <Stack.Screen name="Chat">
-          {(props) => (
-            <Chat
-              isConnected={connectionStatus.isConnected}
-              db={db}
-              {...props}
-            />
-          )}
+          {props => <Chat
+            isConnected={connectionStatus.isConnected}
+            db={db}
+            {...props}
+          />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
