@@ -7,7 +7,7 @@ import CustomActions from './CustomActions';
 import MapView from 'react-native-maps';
 
 //create chat component
-const Chat = ({ route, navigation, db, isConnected }) => {
+const Chat = ({ route, navigation, db, isConnected, storage }) => {
   //inherit props from start page
   const [messages, setMessages] = useState([]);
   const { name, userID, color } = route.params;
