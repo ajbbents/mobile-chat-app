@@ -3,8 +3,9 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
 // import * as MediaLibrary from 'expo-media-library';
 import * as Location from 'expo-location';
+import { ref } from 'firebase/storage';
 
-const CustomActions = ({ wrapperStyle, iconTextStyle, onSend }) => {
+const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage }) => {
   const actionSheet = useActionSheet();
   const onActionPress = () => {
     const options = ['Choose from library', 'Take a photo', 'Send location', 'Cancel'];
@@ -39,6 +40,13 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend }) => {
         let result = await ImagePicker.launchImageLibraryAsync();
         if (!result.canceled) {
           console.log('uploading image here');
+          const imageURI = result.assets[0].uri;
+          const response = await fetch(imageURI);
+          const blob = await response.blog();
+          const newUploadRef = ref(storage, 'image123');
+          uploadBytes(newUploadRef, blob).then(async (snapshot) => {
+            console.log('file has been uploaded');
+          })
         } else Alert.alert("sorry, cannot do that");
       }
     };

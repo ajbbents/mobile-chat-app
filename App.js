@@ -7,6 +7,7 @@ import Chat from './components/Chat';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 
 // import offline functionality
@@ -47,6 +48,9 @@ const App = () => {
   // Initialize Cloud Firestore and get a reference to service
   const db = getFirestore(app);
 
+  // Initialize storage handler with Firestore
+  const storage = getStorage(app);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -60,6 +64,7 @@ const App = () => {
           {props => <Chat
             isConnected={connectionStatus.isConnected}
             db={db}
+            storage={storage}
             {...props}
           />}
         </Stack.Screen>

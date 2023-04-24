@@ -87,7 +87,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
 
   // render add photos.maps circle button
   const renderCustomActions = (props) => {
-    return <CustomActions {...props} />;
+    return <CustomActions storage={storage} {...props} />;
   };
 
   const renderCustomView = (props) => {
