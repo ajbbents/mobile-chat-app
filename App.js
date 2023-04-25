@@ -4,11 +4,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import navigation screens
 import Start from './components/Start';
 import Chat from './components/Chat';
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-
 
 // import offline functionality
 import { useNetInfo } from "@react-native-community/netinfo";

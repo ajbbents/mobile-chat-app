@@ -64,6 +64,10 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
     addDoc(collection(db, "messages"), newMessages[0])
   };
 
+  const deleteCachedMessages = async () => {
+    await AsyncStorage.removeItem("messages");
+  };
+
   //adjusts color and details of text bubbles
   const renderBubble = (props) => {
     return <Bubble
