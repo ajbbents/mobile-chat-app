@@ -1,4 +1,4 @@
-import { TouchableOpacity, Pressable, Text, View, StyleSheet, Alert, Image } from "react-native";
+import { Pressable, Text, View, StyleSheet, Alert } from "react-native";
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -29,6 +29,7 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
           case 2:
             getLocation();
             console.log('wants to get location');
+            return;
           default:
         }
       },
