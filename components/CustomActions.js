@@ -20,15 +20,12 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
         switch (buttonIndex) {
           case 0:
             pickImage();
-            console.log('wants to pick an image');
             return;
           case 1:
             takePhoto();
-            console.log('wants to take a photo');
             return;
           case 2:
             getLocation();
-            console.log('wants to get location');
             return;
           default:
         }
@@ -66,7 +63,6 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
       try {
         let permissions = await ImagePicker.requestCameraPermissionsAsync();
         if (permissions?.granted) {
-          console.log(permissions);
           let result = await ImagePicker.launchCameraAsync();
 
           if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
@@ -80,7 +76,6 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
       if (permissions?.granted) {
         const location = await Location.getCurrentPositionAsync({});
         if (location) {
-          console.log('sending location here');
           onSend({
             location: {
               longitude: location.coords.longitude,
