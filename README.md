@@ -1,8 +1,8 @@
-#<h1>Mobile Chat App</h1>
+<h1>Mobile Chat App</h1>
 <h2>React Native Mobile Chat App</h2>
 <p>A native chat app built with React Native for both Android and iOS devices, providing its users with a chat interface along with the option to take and share images, and location data and to store chat data both on and offline.</p>
 
-#<h2>Built using</h2>
+<h2>Built using</h2>
 <ul>
   <li>React Native</li>
   <li>Gifted Chat</li>
